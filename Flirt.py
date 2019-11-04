@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, inspect, importlib, os, numpy as np
-from os.path import exists,join
+from os.path import exists, join
 
 def main(dir):
 	#Loading data
