@@ -9,7 +9,7 @@ def main(dir):
 
 	#Cutting data
 	cutOff = 5
-	for i in range(cutOff, -1, -1):
+	for i in range(cutOff-1, -1, -1):
 		files.remove(files[i])
 	
 	#Finding reference frame index
@@ -33,7 +33,7 @@ def main(dir):
 
 	#Registering reference
 	identity = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
-        omat = join(omatDir,"%s_OMAT_%02d"%(tag,ref)) # (JAB) Matrix written to directory omatDir
+        omat = join(omatDir,"%s_OMAT_%02d"%(tag,ref+cutOff)) # (JAB) Matrix written to directory omatDir
 	np.savetxt(omat, np.array(identity))
 	
 	#Registering all other frames
@@ -43,11 +43,11 @@ def main(dir):
 		if i <= ref:
 			j = ref-i
 			input = files[j + 1]
-                        omat = join(omatDir,"%s_OMAT_%02d"%(tag,j)) # (JAB)
+                        omat = join(omatDir,"%s_OMAT_%02d"%(tag,j+cutOff)) # (JAB)
 		#Chaining forwards from reference index
 		else:
 			input = files[j - 1]
-                        omat = join(omatDir,"%s_OMAT_%02d"%(tag,j)) # (JAB)
+                        omat = join(omatDir,"%s_OMAT_%02d"%(tag,j+cutOff)) # (JAB)
 		#(JAB) Address file in their respective subdirectories
 		os.system("flirt -in " + dir + "/" + files[j] + " -ref " + dir + "/" + input + " -omat " + omat + options)
 
@@ -81,11 +81,11 @@ def main(dir):
 			m1 = np.dot(m1, m2)
 		
 		#Writing matrix file	
-		mFile = join(mDir,"%s_MAT_%02d"%(tag,i)) # (JAB)
+		mFile = join(mDir,"%s_MAT_%02d"%(tag,i+cutOff)) # (JAB)
 		np.savetxt(mFile, m1)
 
 		#Creating resampled file
-		out = join(outDir,"%s_OUT_%02d"%(tag,i)) # (JAB)
+		out = join(outDir,"%s_OUT_%02d"%(tag,i+cutOff)) # (JAB)
 		os.system("flirt -in " + dir + "/" + files[i] + " -ref " + dir + "/" + files[target] + " -applyxfm -init " + mFile + " -out " + out)
 
 
