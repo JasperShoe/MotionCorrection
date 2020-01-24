@@ -7,6 +7,19 @@ def main(dir):
 	#Loading data
 	files = [f for f in os.listdir(dir) if ".nii" in f]
 
+	#Sorting files by time point
+	tp = 0
+	sortedFiles = []
+	sortedFiles.append([files[0]])
+	for i in range (1, len(files)):
+		tpIndex = sortedFiles[tp][0].index("TP") + 2
+		fIndex = files[i].index("TP") + 2		
+		if int(sortedFiles[tp][0][tpIndex:tpIndex+2]) == int(files[i][fIndex:fIndex+2]):
+			sortedFiles[tp].append(files[i])
+		else:
+			tp += 1
+			sortedFiles.append([files[i]])
+
 	#Cutting data
 	cutOff = 5
 	for i in range(cutOff-1, -1, -1):
